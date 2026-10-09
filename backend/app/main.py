@@ -25,6 +25,8 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
+        "https://scamguard-osmannzrl.vercel.app",
+        "https://scamguard-git-main-osmannzrl.vercel.app",
         "https://scamguard-three-alpha.vercel.app",
         "http://localhost:5173",
         "http://127.0.0.1:5173",

@@ -22,17 +22,10 @@ app = FastAPI(
 )
 
 # CORS: lokal frontend və yayımlanmış Vercel frontend
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "https://scamguard-osmannzrl.vercel.app",
-        "https://scamguard-git-main-osmannzrl.vercel.app",
-        "https://scamguard-three-alpha.vercel.app",
-        "http://localhost:5173",
-        "http://127.0.0.1:5173",
-        "http://localhost:5175",
-        "http://127.0.0.1:5175",
-    ],
+    allow_origin_regex=r"https?://(localhost|127\.0\.0\.1)(:\d+)?|https://scamguard(-[a-z0-9-]+)?\.vercel\.app",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

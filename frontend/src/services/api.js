@@ -1,6 +1,5 @@
  	
-const API_BASE = "https://scamguard-backend-1o1a.onrender.com";
-
+const API_BASE = "http://127.0.0.1:8000";
 export function getToken() {
   return localStorage.getItem("scamguard_token");
 }

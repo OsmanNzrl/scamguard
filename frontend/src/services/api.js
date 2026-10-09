@@ -1,7 +1,5 @@
-
-const API_BASE = (
-  import.meta.env.VITE_API_URL || "http://127.0.0.1:8000"
-).replace(/\/+$/, "");
+ 	
+const API_BASE = "https://scamguard-backend-1o1a.onrender.com";
 
 export function getToken() {
   return localStorage.getItem("scamguard_token");

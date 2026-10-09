@@ -1,0 +1,208 @@
+    {
+    "organizations": [
+        {
+        "id": "accessbank",
+        "name": "AccessBank",
+        "aliases": ["accessbank", "access bank", "aksesbank"],
+        "category": "bank",
+        "official_domains": ["accessbank.az"],
+        "official_website": "https://www.accessbank.az",
+        "contact_page": "https://www.accessbank.az/az/contacts/",
+        "phones": ["151", "+994 12 490 80 10"],
+        "emails": ["info@accessbank.az"],
+        "source_urls": [
+            "https://www.accessbank.az/az/contacts/",
+            "https://www.cbar.az/page-195/banks?language=az"
+        ],
+        "verification_status": "verified_from_official_source",
+        "last_verified": "2026-10-09"
+        },
+        {
+        "id": "unibank",
+        "name": "Unibank",
+        "aliases": ["unibank", "unibank kb"],
+        "category": "bank",
+        "official_domains": ["unibank.az"],
+        "official_website": "https://unibank.az",
+        "contact_page": "https://unibank.az/az/contacts",
+        "phones": ["117", "+994 12 495 57 57"],
+        "emails": ["bank@unibank.az"],
+        "source_urls": [
+            "https://unibank.az/az/contacts",
+            "https://www.cbar.az/page-195/banks?language=az"
+        ],
+        "verification_status": "verified_from_official_source",
+        "last_verified": "2026-10-09"
+        },
+        {
+        "id": "kapitalbank",
+        "name": "Kapital Bank",
+        "aliases": ["kapital bank", "kapitalbank", "birbank"],
+        "category": "bank",
+        "official_domains": ["kapitalbank.az", "birbank.az"],
+        "official_website": "https://kapitalbank.az",
+        "contact_page": "https://kapitalbank.az/contacts",
+        "phones": ["196", "+994 12 493 55 00"],
+        "emails": ["info@kapitalbank.az"],
+        "source_urls": [
+            "https://kapitalbank.az/contacts"
+        ],
+        "verification_status": "verified_from_official_source",
+        "last_verified": "2026-10-09"
+        },
+        {
+        "id": "abb",
+        "name": "Azərbaycan Beynəlxalq Bankı",
+        "aliases": ["abb", "beynəlxalq bank", "azerbaijan international bank", "abb bank"],
+        "category": "bank",
+        "official_domains": ["abb-bank.az"],
+        "official_website": "https://abb-bank.az",
+        "contact_page": "https://abb-bank.az/az/elaqe",
+        "phones": ["937", "+994 12 493 00 91"],
+        "emails": ["info@abb-bank.az"],
+        "source_urls": [
+            "https://abb-bank.az/az/elaqe"
+        ],
+        "verification_status": "verified_from_official_source",
+        "last_verified": "2026-10-09"
+        },
+        {
+        "id": "pashabank",
+        "name": "PAŞA Bank",
+        "aliases": ["pasha bank", "paşa bank", "pashabank"],
+        "category": "bank",
+        "official_domains": ["pashabank.az"],
+        "official_website": "https://www.pashabank.az",
+        "contact_page": "https://www.pashabank.az/contact_us/az/",
+        "phones": ["*9123", "+994 12 496 50 00"],
+        "emails": ["office@pashabank.az"],
+        "source_urls": [
+            "https://www.pashabank.az/contact_us/az/"
+        ],
+        "verification_status": "verified_from_official_source",
+        "last_verified": "2026-10-09"
+        },
+        {
+        "id": "bankrespublika",
+        "name": "Bank Respublika",
+        "aliases": ["bank respublika", "bankrespublika"],
+        "category": "bank",
+        "official_domains": ["bankrespublika.az"],
+        "official_website": "https://www.bankrespublika.az",
+        "contact_page": "https://www.bankrespublika.az/az/contacts/",
+        "phones": ["144", "+994 12 598 08 00"],
+        "emails": ["info@bankrespublika.az"],
+        "source_urls": [
+            "https://www.bankrespublika.az/az/contacts/"
+        ],
+        "verification_status": "verified_from_official_source",
+        "last_verified": "2026-10-09"
+        },
+        {
+        "id": "asan",
+        "name": "ASAN xidmət",
+        "aliases": ["asan", "asan xidmət", "asan xidmet"],
+        "category": "government",
+        "official_domains": ["asan.gov.az"],
+        "official_website": "https://asan.gov.az",
+        "contact_page": "https://asan.gov.az/az/contact",
+        "phones": ["108", "+994 12 444 74 74"],
+        "emails": ["info@asan.gov.az"],
+        "source_urls": [
+            "https://asan.gov.az/az/contact"
+        ],
+        "verification_status": "verified_from_official_source",
+        "last_verified": "2026-10-09"
+        },
+        {
+        "id": "taxes",
+        "name": "Dövlət Vergi Xidməti",
+        "aliases": [
+            "dövlət vergi xidməti",
+            "vergi xidməti",
+            "vergi",
+            "taxes.gov.az"
+        ],
+        "category": "government",
+        "official_domains": ["taxes.gov.az"],
+        "official_website": "https://www.taxes.gov.az",
+        "contact_page": "https://www.taxes.gov.az/az/page/dovlet-vergi-xidmeti",
+        "phones": ["195-1", "+994 12 403 89 70"],
+        "emails": ["office@taxes.gov.az"],
+        "source_urls": [
+            "https://www.taxes.gov.az/az/page/dovlet-vergi-xidmeti"
+        ],
+        "verification_status": "verified_from_official_source",
+        "last_verified": "2026-10-09"
+        },
+        {
+        "id": "customs",
+        "name": "Dövlət Gömrük Komitəsi",
+        "aliases": [
+            "dövlət gömrük komitəsi",
+            "gömrük",
+            "customs",
+            "e-customs"
+        ],
+        "category": "government",
+        "official_domains": ["customs.gov.az"],
+        "official_website": "https://customs.gov.az",
+        "contact_page": "https://customs.gov.az/az/elaqe",
+        "phones": ["195", "+994 12 404 22 00"],
+        "emails": ["public@customs.gov.az"],
+        "source_urls": [
+            "https://customs.gov.az/az/elaqe"
+        ],
+        "verification_status": "verified_from_official_source",
+        "last_verified": "2026-10-09"
+        },
+        {
+        "id": "azercell",
+        "name": "Azercell",
+        "aliases": ["azercell", "azercell telecom", "azercel"],
+        "category": "telecom",
+        "official_domains": ["azercell.com"],
+        "official_website": "https://www.azercell.com",
+        "contact_page": "https://www.azercell.com/az/about-us/contact-us.html",
+        "phones": ["*1111", "+994 12 490 49 49"],
+        "emails": ["customercare@azercell.com"],
+        "source_urls": [
+            "https://www.azercell.com/az/about-us/contact-us.html"
+        ],
+        "verification_status": "verified_from_official_source",
+        "last_verified": "2026-10-09"
+        },
+        {
+        "id": "bakcell",
+        "name": "Bakcell",
+        "aliases": ["bakcell", "bak cell"],
+        "category": "telecom",
+        "official_domains": ["bakcell.com"],
+        "official_website": "https://www.bakcell.com",
+        "contact_page": "https://www.bakcell.com/contact-us",
+        "phones": ["555", "+994 12 498 89 89"],
+        "emails": ["info@bakcell.com"],
+        "source_urls": [
+            "https://www.bakcell.com/contact-us"
+        ],
+        "verification_status": "verified_from_official_source",
+        "last_verified": "2026-10-09"
+        },
+        {
+        "id": "nar",
+        "name": "Nar",
+        "aliases": ["nar", "nar mobile", "nar mobile operator", "azerfon"],
+        "category": "telecom",
+        "official_domains": ["nar.az"],
+        "official_website": "https://www.nar.az",
+        "contact_page": "https://www.nar.az/elaqe/",
+        "phones": ["777", "+994 12 444 07 77"],
+        "emails": ["customercare@azerfon.az"],
+        "source_urls": [
+            "https://www.nar.az/elaqe/"
+        ],
+        "verification_status": "verified_from_official_source",
+        "last_verified": "2026-10-09"
+        }
+    ]
+    }

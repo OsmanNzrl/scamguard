@@ -15,16 +15,17 @@ from app.ai_analyzer import analyze_with_gemini
 from app.official_contacts import get_official_contact
 
 
-
 app = FastAPI(
     title="ScamGuard API",
     description="ScamGuard AI Fraud Detection API",
     version="1.1.0",
 )
 
+# CORS: lokal frontend və yayımlanmış Vercel frontend
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
+        "https://scamguard-three-alpha.vercel.app",
         "http://localhost:5173",
         "http://127.0.0.1:5173",
         "http://localhost:5175",
@@ -125,7 +126,6 @@ def get_contact_safely(message):
     Təşkilat əlaqələrini lokal JSON bazasından əldə edir.
     Əlaqə bazasında xəta olsa belə, əsas analiz davam edir.
     """
-
     try:
         contact = get_official_contact(message)
 
@@ -156,7 +156,6 @@ def add_contact_information(response, message):
     """
     Mövcud analiz cavabına rəsmi əlaqə məlumatını əlavə edir.
     """
-
     response["official_contact"] = get_contact_safely(message)
     return response
 
@@ -166,7 +165,6 @@ def normalize_ai_result(result):
     AI-nın risk balını və risk səviyyəsini saxlayır.
     Risk səviyyəsini bal əsasında yenidən hesablamır.
     """
-
     if not isinstance(result, dict):
         raise ValueError("AI nəticəsi düzgün formatda deyil.")
 
@@ -219,7 +217,6 @@ def normalize_fallback(result):
     """
     Yalnız Gemini işləmədikdə qayda əsaslı analizdən istifadə edir.
     """
-
     if not isinstance(result, dict):
         raise ValueError("Qayda əsaslı analiz nəticəsi yoxdur.")
 
@@ -278,7 +275,6 @@ def analyze_message_endpoint(request: MessageRequest):
         ai_result = analyze_with_gemini(message)
         response = normalize_ai_result(ai_result)
 
-        # Təşkilatın rəsmi əlaqə məlumatını əlavə et.
         return add_contact_information(response, message)
 
     except Exception as exc:
@@ -321,4 +317,4 @@ def analyze_message_endpoint(request: MessageRequest):
         ),
     }
 
-    return add_contact_information(response, message)   
+    return add_contact_information(response, message)

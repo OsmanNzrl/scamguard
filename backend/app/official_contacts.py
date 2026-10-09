@@ -1,4 +1,3 @@
-
 import json
 import re
 import unicodedata
@@ -27,7 +26,7 @@ def normalize_text(value: str) -> str:
 
 
 def load_organizations() -> list[dict]:
-    """Təşkilatları JSON faylından təhlükəsiz oxuyur."""
+    """Təşkilatları JSON faylından oxuyur."""
     try:
         with DATA_FILE.open("r", encoding="utf-8") as file:
             data = json.load(file)
@@ -49,31 +48,40 @@ def load_organizations() -> list[dict]:
         return []
 
 
+def extract_urls(message: str) -> list[str]:
+    """Mesajdan HTTP/HTTPS və www URL-lərini çıxarır."""
+    pattern = (
+        r"""(?i)\b(?:https?://|www\.)[^\s<>"']+"""
+    )
+
+    urls = re.findall(pattern, message)
+
+    # URL sonundakı cümlə durğu işarələrini təmizlə.
+    return [
+        url.rstrip(".,!?;:)]}")
+        for url in urls
+    ]
+
+
 def remove_urls(message: str) -> str:
-    """
-    URL-ləri və domenləri təşkilat axtarışından çıxarır.
-    Məsələn, saxta linkdəki 'birbank' ABB seçimini dəyişməməlidir.
-    """
+    """URL-ləri mesaj mətnindən çıxarır."""
     message = re.sub(
-        r"https?://[^\s<>\"']+",
+        r"""(?i)\bhttps?://[^\s<>"']+""",
         " ",
         message,
-        flags=re.IGNORECASE,
     )
 
     message = re.sub(
-        r"\bwww\.[^\s<>\"']+",
+        r"""(?i)\bwww\.[^\s<>"']+""",
         " ",
         message,
-        flags=re.IGNORECASE,
     )
 
-    # URL protokolu olmadan yazılmış domenləri də çıxarır.
+    # Protokolsuz domenləri çıxarır.
     message = re.sub(
-        r"(?<![@\w])(?:[\w-]+\.)+[a-z]{2,}(?:/[^\s<>\"']*)?",
+        r"""(?i)(?<![@\w])(?:[\w-]+\.)+[a-z]{2,}(?:/[^\s<>"']*)?""",
         " ",
         message,
-        flags=re.IGNORECASE,
     )
 
     return message
@@ -81,13 +89,12 @@ def remove_urls(message: str) -> str:
 
 def find_organization(message: str) -> dict | None:
     """
-    Təşkilat adını URL-lərdən kənar mətn əsasında müəyyən edir.
-
-    Daha uzun ad uyğunluğu üstün tutulur. ABB və Birbank kimi
-    adlar yalnız mesaj mətnində mövcud olduqda nəzərə alınır.
+    Əvvəlcə mesaj mətnində, sonra URL-də təşkilat axtarır.
+    URL-də brendin tapılması göndərənin həqiqiliyini təsdiqləmir.
     """
     clean_message = remove_urls(message)
     text = f" {normalize_text(clean_message)} "
+    url_text = f" {normalize_text(message)} "
 
     matches = []
 
@@ -99,7 +106,7 @@ def find_organization(message: str) -> dict | None:
 
         names = [org.get("name", ""), *aliases]
         best_length = 0
-        matched_name_is_full_name = False
+        matched_in_message = False
 
         for name in names:
             if not isinstance(name, str):
@@ -117,44 +124,34 @@ def find_organization(message: str) -> dict | None:
             )
 
             if re.search(pattern, text):
-                is_full_name = (
-                    normalized_name
-                    == normalize_text(org.get("name", ""))
-                )
-
-                if (
-                    len(normalized_name) > best_length
-                    or (
-                        len(normalized_name) == best_length
-                        and is_full_name
-                    )
-                ):
+                if len(normalized_name) > best_length:
                     best_length = len(normalized_name)
-                    matched_name_is_full_name = is_full_name
+                    matched_in_message = True
+
+            elif re.search(pattern, url_text):
+                if len(normalized_name) > best_length:
+                    best_length = len(normalized_name)
+                    matched_in_message = False
 
         if best_length:
             matches.append(
-                (
-                    best_length,
-                    matched_name_is_full_name,
-                    len(normalize_text(org.get("name", ""))),
-                    org,
-                )
+                (matched_in_message, best_length, org)
             )
 
     if not matches:
         return None
 
+    # Mətn uyğunluğu URL uyğunluğundan üstündür.
     matches.sort(
-        key=lambda item: (item[0], item[1], item[2]),
+        key=lambda item: (item[0], item[1]),
         reverse=True,
     )
 
-    return matches[0][3]
+    return matches[0][2]
 
 
 def is_https_url(value: str) -> bool:
-    """URL-nin HTTPS istifadə etdiyini yoxlayır."""
+    """URL-nin etibarlı formatda HTTPS olduğunu yoxlayır."""
     if not isinstance(value, str):
         return False
 
@@ -167,12 +164,13 @@ def is_https_url(value: str) -> bool:
             and not parsed.username
             and not parsed.password
         )
+
     except ValueError:
         return False
 
 
 def hostname_matches_domain(hostname: str, domain: str) -> bool:
-    """Hostun qeyd edilmiş domenə aid olduğunu yoxlayır."""
+    """Hostun domenə və ya onun subdomeninə aid olduğunu yoxlayır."""
     hostname = hostname.lower().rstrip(".")
     domain = domain.lower().strip().rstrip(".")
 
@@ -183,8 +181,8 @@ def hostname_matches_domain(hostname: str, domain: str) -> bool:
 
 
 def url_matches_domains(url: str, domains: list) -> bool:
-    """URL-nin HTTPS və icazəli domenə uyğunluğunu yoxlayır."""
-    if not is_https_url(url):
+    """HTTPS URL-nin icazəli domenə uyğunluğunu yoxlayır."""
+    if not isinstance(url, str) or not is_https_url(url):
         return False
 
     try:
@@ -204,10 +202,9 @@ def url_matches_domains(url: str, domains: list) -> bool:
 
 def verified_contact_data(org: dict) -> bool:
     """
-    Bazadakı statusu, saytın domenini və mənbə keçidlərini yoxlayır.
-
-    Bu yoxlama məlumatın aktual olduğunu və telefonun işlədiyini
-    avtomatik təsdiqləmir.
+    Bazadakı statusu, rəsmi domeni və mənbə URL-lərini yoxlayır.
+    Bu yoxlama mənbələrin hazırda əlçatan olduğunu və əlaqə
+    məlumatlarının aktual olduğunu avtomatik təsdiqləmir.
     """
     if org.get("verification_status") not in VERIFIED_STATUSES:
         return False
@@ -257,13 +254,20 @@ def clean_string_list(value) -> list[str]:
 
 
 def get_official_contact(message: str) -> dict:
-    """Mesajda adı çəkilən qurumun əlaqə məlumatlarını qaytarır."""
+    """
+    Mesajda adı çəkilən və ya URL-də təqlid olunan təşkilatı tapır.
+    Rəsmi əlaqə məlumatlarını yalnız bazadakı yoxlamalar keçdikdə verir.
+    """
+    if not isinstance(message, str):
+        message = ""
+
     org = find_organization(message)
 
     if org is None:
         return {
             "organization_found": False,
             "organization_name": None,
+            "category": None,
             "verification_status": "not_found",
             "official_website": None,
             "contact_page": None,
@@ -289,8 +293,7 @@ def get_official_contact(message: str) -> dict:
 
     domains = org.get("official_domains", [])
 
-    phones = clean_string_list(org.get("phones", []))
-
+    # E-poçt yalnız rəsmi domenə uyğun gələndə göstərilir.
     emails = []
 
     for email in clean_string_list(org.get("emails", [])):
@@ -319,7 +322,7 @@ def get_official_contact(message: str) -> dict:
         "verification_status": org.get("verification_status"),
         "official_website": org.get("official_website"),
         "contact_page": org.get("contact_page"),
-        "phones": phones,
+        "phones": clean_string_list(org.get("phones", [])),
         "emails": emails,
         "source_urls": sources,
         "user_message": (
